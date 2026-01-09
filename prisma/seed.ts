@@ -45,6 +45,13 @@ async function main() {
 			location: "Piso 3",
 			amenities: ["Proyector", "Video conferencia", "Café"],
 		},
+        {
+			name: "Sala VIP",
+			description: "Sala VIP para clientes especiales",
+			capacity: 10,
+			location: "Piso 4",
+			amenities: ["Catering", "Servicio personalizado", "Vista panorámica"],
+		},
 	];
 
 	await Promise.all(

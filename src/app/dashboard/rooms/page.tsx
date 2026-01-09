@@ -10,7 +10,10 @@ export default async function RoomsPage() {
   }
 
   const rooms = await prisma.room.findMany({
-    orderBy: { name: "asc" },
+    orderBy: [
+      { location: "asc" },
+      { name: "asc" },
+    ],
   });
 
   return (

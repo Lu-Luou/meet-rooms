@@ -20,9 +20,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Link className="rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary" href="/dashboard/profile">
               Perfil
             </Link>
-            <Link className="rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary" href="/">
-              Inicio
-            </Link>
             <div className="h-6 w-px bg-border" aria-hidden />
             <LogoutButton />
           </nav>
