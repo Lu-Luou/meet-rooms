@@ -24,8 +24,8 @@ export default function Home() {
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li>Next.js + TS</li>
               <li>Tailwind configurado</li>
-              <li>Prisma + SQLite</li>
-              <li>NextAuth (a completar)</li>
+              <li>Prisma + Postgres</li>
+              <li>NextAuth con credenciales</li>
             </ul>
           </div>
         </div>
