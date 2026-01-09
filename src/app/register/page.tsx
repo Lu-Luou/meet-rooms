@@ -36,7 +36,7 @@ export default function RegisterPage() {
     }
 
     // Autologin
-    await signIn("credentials", { email, password, redirect: true, callbackUrl: "/" });
+    await signIn("credentials", { email, password, redirect: true, callbackUrl: "/dashboard/reservations" });
   };
 
   return (
