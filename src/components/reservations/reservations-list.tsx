@@ -73,7 +73,7 @@ export function ReservationsList({ reservations, rooms }: { reservations: Reserv
               triggerLabel="Editar"
               submitLabel="Guardar cambios"
               reservationId={reservation.id}
-              triggerClassName="rounded-lg border border-blue-200 bg-white px-3 py-1 text-sm font-semibold text-blue-700 hover:bg-blue-50 disabled:opacity-60 shadow-none focus:outline-none focus:ring-2 focus:ring-blue-200"
+              triggerClassName="rounded-lg border border-blue-200 bg-white px-3 py-1 text-sm font-semibold text-blue-800 hover:bg-blue-50 disabled:opacity-60 shadow-none focus:outline-none focus:ring-2 focus:ring-blue-200"
               initial={{
                 title: reservation.title,
                 description: reservation.description ?? "",
