@@ -2,20 +2,18 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("es-ES", { day: "2-digit", month: "short", year: "numeric" }).format(date);
-}
-
-function formatTime(date: Date) {
-  return new Intl.DateTimeFormat("es-ES", { hour: "2-digit", minute: "2-digit" }).format(date);
-}
+import { ReservationsList } from "@/components/reservations/reservations-list";
+import { ReservationFormModal } from "@/components/reservations/reservation-form-modal";
 
 export default async function ReservationsPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     redirect("/login");
   }
+
+  const rooms = await prisma.room.findMany({
+    orderBy: [{ location: "asc" }, { name: "asc" }],
+  });
 
   const reservations = await prisma.reservation.findMany({
     where: { userId: session.user.id },
@@ -36,38 +34,21 @@ export default async function ReservationsPage() {
           </div>
         </div>
         <p className="mt-4 text-sm text-muted-foreground">
-          Tus reservas en orden cronológico. Próximamente podrás editarlas y cancelarlas desde aquí.
+          Crea, consulta y cancela tus reservas. Las validaciones de disponibilidad se aplican automáticamente.
         </p>
       </div>
-
-      {reservations.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-white/60 p-10 text-center text-sm text-muted-foreground">
-          No tienes reservas aún. Crea la primera desde el flujo de creación.
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">Tus reservas</h3>
+          <ReservationFormModal
+            mode="create"
+            rooms={rooms}
+            triggerLabel="Nueva reserva"
+            submitLabel="Crear reserva"
+          />
         </div>
-      ) : (
-        <div className="overflow-hidden rounded-xl border border-border bg-white/90 shadow-sm">
-          <div className="grid grid-cols-1 divide-y divide-border text-sm text-foreground">
-            {reservations.map((reservation) => (
-              <div key={reservation.id} className="grid gap-3 p-4 sm:grid-cols-[1.1fr_0.9fr_0.8fr] sm:items-center">
-                <div className="space-y-1">
-                  <p className="text-base font-semibold">{reservation.title}</p>
-                  {reservation.description && <p className="text-xs text-muted-foreground">{reservation.description}</p>}
-                </div>
-                <div className="space-y-1 text-sm text-muted-foreground">
-                  <p className="font-semibold text-foreground">{reservation.room.name}</p>
-                  <p>
-                    {formatDate(reservation.startTime)} · {formatTime(reservation.startTime)} — {formatTime(reservation.endTime)}
-                  </p>
-                </div>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>ID: {reservation.id.slice(0, 8)}</p>
-                  <p>Creada: {formatDate(reservation.createdAt)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+        <ReservationsList reservations={reservations} rooms={rooms} />
+      </div>
     </section>
   );
 }
