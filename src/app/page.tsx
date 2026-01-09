@@ -1,9 +1,18 @@
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/auth";
+
 const highlights = [
   "Autenticación con NextAuth",
   "Base de datos Prisma + Postgres",
 ];
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  if (session?.user?.id) {
+    redirect("/dashboard/reservations");
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-background">
       <div className="mx-auto flex max-w-5xl flex-col gap-12 px-6 py-16">
