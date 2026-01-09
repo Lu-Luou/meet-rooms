@@ -1,0 +1,52 @@
+generator client {
+	provider = "prisma-client-js"
+}
+
+datasource db {
+	provider = "postgresql"
+	url      = env("DATABASE_URL")
+}
+
+model User {
+	id            String         @id @default(cuid())
+	email         String?        @unique
+	name          String?
+	createdAt     DateTime       @default(now()) @map("created_at")
+	updatedAt     DateTime       @updatedAt @map("updated_at")
+	reservations  Reservation[]
+
+	@@map("users")
+}
+
+model Room {
+	id            String         @id @default(cuid())
+	name          String         @unique
+	description   String?
+	capacity      Int            @default(10)
+	location      String?
+	amenities     String[]
+	createdAt     DateTime       @default(now()) @map("created_at")
+	updatedAt     DateTime       @updatedAt @map("updated_at")
+	reservations  Reservation[]
+
+	@@map("rooms")
+}
+
+model Reservation {
+	id          String   @id @default(cuid())
+	userId      String   @map("user_id")
+	roomId      String   @map("room_id")
+	title       String
+	description String?
+	startTime   DateTime @map("start_time")
+	endTime     DateTime @map("end_time")
+	createdAt   DateTime @default(now()) @map("created_at")
+	updatedAt   DateTime @updatedAt @map("updated_at")
+
+	user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+	room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+	@@index([roomId, startTime, endTime])
+	@@index([userId])
+	@@map("reservations")
+}
